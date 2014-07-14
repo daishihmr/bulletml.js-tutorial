@@ -56,8 +56,20 @@ tm.define("MainScene", {
                 ])
             ])
         });
+        var DANMAKU1 = new bulletml.Root({
+            top: action([
+                repeat(100, [
+                    fire(direction(23, "sequence"), bulletRef("straight")),
+                    wait(1)
+                ])
+            ]),
+            straight: bullet(action([
+                wait("20 + $rand * 50"),
+                changeDirection(direction(180, "absolute"), 10)
+            ]))
+        });
 
-        this.enemy.startDanmaku(DANMAKU0, params);
+        this.enemy.startDanmaku(DANMAKU1, params);
     }
 });
 
