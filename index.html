@@ -14,6 +14,7 @@
 <script>
 tm.main(function() {
     app = tm.display.CanvasApp("#app");
+    app.fps = 60;
     app.resize(320, 320).fitWindow();
     app.replaceScene(MainScene());
     app.run();
@@ -49,7 +50,10 @@ tm.define("MainScene", {
         bulletml.dsl();
         var DANMAKU0 = new bulletml.Root({
             top: action([
-                fire(bullet)
+                repeat(100, [
+                    fire(direction(23, "sequence"), bullet()),
+                    wait(1)
+                ])
             ])
         });
 
