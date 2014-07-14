@@ -13,9 +13,23 @@
 
 <script>
 tm.main(function() {
+    tm.asset.Loader.register("xml", function(path) {
+        var file = tm.util.File();
+        file.load({
+            url: path,
+            dataType: 'xml',
+        });
+        return file;
+    });
+
     app = tm.display.CanvasApp("#app");
     app.resize(320, 320).fitWindow();
-    app.replaceScene(MainScene());
+    app.replaceScene(tm.ui.LoadingScene({
+        assets: {
+            sample: "sample.xml"
+        },
+        nextScene: MainScene
+    }))
     app.run();
 });
 
@@ -45,15 +59,10 @@ tm.define("MainScene", {
             }.bind(this)
         };
 
+        var enemy = this.enemy;
 
-        bulletml.dsl();
-        var DANMAKU0 = new bulletml.Root({
-            top: action([
-                fire(bullet)
-            ])
-        });
-
-        this.enemy.startDanmaku(DANMAKU0, params);
+        var DANMAKU0 = bulletml.buildXML(tm.asset.Manager.get("sample").data);
+        enemy.startDanmaku(DANMAKU0, params);
     }
 });
 

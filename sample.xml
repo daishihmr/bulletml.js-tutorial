@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<bulletml>
+    <action label="top">
+        <fire><bullet /></fire>
+    </action>
+</bulletml>
