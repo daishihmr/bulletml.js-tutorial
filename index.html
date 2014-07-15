@@ -59,14 +59,19 @@ tm.define("MainScene", {
         var DANMAKU1 = new bulletml.Root({
             top: action([
                 repeat(100, [
-                    fire(direction(23, "sequence"), bulletRef("straight")),
-                    wait(1)
+                    fire(bullet(actionRef("explosion"))),
+                    wait(200)
                 ])
             ]),
-            straight: bullet(action([
-                wait("20 + $rand * 50"),
-                changeDirection(direction(180, "absolute"), 10)
-            ]))
+            explosion: action([
+                wait(100),
+                changeSpeed(speed(0), 20),
+                wait(20),
+                repeat(8, [
+                    fire(direction("$rand * 360"), bullet())
+                ]),
+                vanish()
+            ])
         });
 
         this.enemy.startDanmaku(DANMAKU1, params);
