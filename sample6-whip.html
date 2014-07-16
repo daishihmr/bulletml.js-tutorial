@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+<canvas id="app"></canvas>
+
+<script type="text/javascript" src="tmlib.js"></script>
+<script type="text/javascript" src="bulletml.js"></script>
+<script type="text/javascript" srC="tmlib.bulletml.js"></script>
+
+<script>
+tm.main(function() {
+    app = tm.display.CanvasApp("#app");
+    app.fps = 60;
+    app.resize(320, 320).fitWindow();
+    app.replaceScene(MainScene());
+    app.run();
+});
+
+tm.define("MainScene", {
+    superClass: "tm.app.Scene",
+
+    init: function() {
+        this.superInit();
+        this.fromJSON({
+            children: {
+                enemy: {
+                    type: "tm.display.CircleShape",
+                    init: [50, 50],
+                    x: 320 * 0.5, y: 320 * 0.1
+                },
+                player: {
+                    type: "Player",
+                    x: 320 * 0.5, y: 320 * 0.9
+                }
+            }
+        });
+
+        var params = {
+            target: this.player,
+            createNewBullet: function(runner) {
+                tm.bulletml.Bullet(runner).addChildTo(this);
+            }.bind(this)
+        };
+
+
+        bulletml.dsl();
+        var DANMAKU0 = new bulletml.Root({
+            top: action([
+                repeat(999, [
+                    fire(speed(1.5), bullet()),
+                    repeat(10, [
+                        wait(5),
+                        fire(direction(0, "sequence"), speed(0.5, "sequence"), bullet()),
+                    ]),
+                    wait(120),
+                ]),
+            ]),
+        });
+
+        this.enemy.startDanmaku(DANMAKU0, params);
+    }
+});
+
+tm.define("Player", {
+    superClass: "tm.display.TriangleShape",
+
+    init: function() {
+        this.superInit(25, 25);
+        this.boundingType = "circle";
+        this.raduis = 2;
+        Player.SINGLETON = this;
+    },
+    update: function(app) {
+        var kb = app.keyboard;
+        this.position.add(kb.getKeyDirection().mul(4));
+    }
+});
+Player.SINGLETON = null;
+</script>
+
+</body>
+</html>
