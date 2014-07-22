@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<script type="text/javascript" src="tmlib.js"></script>
+<script type="text/javascript" src="bulletml.js"></script>
+<script type="text/javascript" srC="tmlib.bulletml.js"></script>
+
+<script>
+tm.main(function() {
+    var canvas = tm.graphics.Canvas("#c");
+    canvas.resize(500, 500);
+
+    canvas.fillStyle = "white";
+    canvas.fillRect(0, 0, 500, 500);
+
+    canvas.strokeStyle = "black";
+    canvas.drawLine(250, 250 - 20, 250, 250 + 20);
+    canvas.drawLine(250 - 20, 250, 250 + 20, 250);
+
+    for (var i = 0; i < 17; i++) {
+        if (i === 0) {
+            canvas.strokeStyle = "red";
+            canvas.fillStyle = "red";
+        } else {
+            canvas.strokeStyle = "rgba(0, 0, 0, 0.2)";
+            canvas.fillStyle = "rgba(0, 0, 0, 0.2)";
+        }
+
+        var a = Math.PI * 2 * i / 17 - Math.PI * 0.5;
+        var b = a + Math.PI * 0.5;
+
+        var cx = 250 + Math.cos(a) * 90;
+        var cy = 250 + Math.sin(a) * 90;
+
+        canvas.strokeCircle(cx, cy, 10);
+
+        var dx = cx + Math.cos(b) * 80;
+        var dy = cy + Math.sin(b) * 80;
+
+        canvas.drawLine(cx, cy, dx, dy);
+        canvas.fillPolygon(dx, dy, 9, 3, b * Math.RAD_TO_DEG);
+    }
+
+    canvas.saveAsImage();
+});
+</script>
+
+</body>
+</html>
